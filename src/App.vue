@@ -1,28 +1,43 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+    <Form @add="addTodo" />
+    <Todo
+      v-for="todo in todos"
+      :key="todo.id"
+      :todo="todo"
+      @remove="removeTodo"
+    />
   </div>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
+import Todo from "./components/Todo.vue";
+import Form from "./components/Form.vue";
 
 export default {
   name: "app",
   components: {
-    HelloWorld
+    Todo,
+    Form
+  },
+  data: function() {
+    return {
+      nextId: 1,
+      todos: []
+    };
+  },
+  methods: {
+    addTodo: function(text) {
+      this.todos.unshift({
+        id: this.nextId,
+        body: text
+      });
+      this.nextId++;
+    },
+    removeTodo: function(target) {
+      const idx = this.todos.findIndex(({ id }) => id === target);
+      this.todos.splice(idx, 1);
+    }
   }
 };
 </script>
-
-<style>
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
