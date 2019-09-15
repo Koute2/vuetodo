@@ -18,10 +18,14 @@ export default {
       }
     }
   },
-  methods: {
-    remove: function() {
-      this.$emit("remove", this.todo.id);
-    }
+  setup({ todo }, { emit }) {
+    const remove = () => {
+      emit("remove", todo.id);
+    };
+
+    return {
+      remove
+    };
   }
 };
 </script>
