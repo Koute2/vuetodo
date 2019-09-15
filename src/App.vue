@@ -2,7 +2,7 @@
   <div id="app">
     <Form @add="addTodo" />
     <Todo
-      v-for="todo in todos"
+      v-for="todo in state.todos"
       :key="todo.id"
       :todo="todo"
       @remove="removeTodo"
@@ -11,6 +11,7 @@
 </template>
 
 <script>
+import { reactive } from "@vue/composition-api";
 import Todo from "./components/Todo.vue";
 import Form from "./components/Form.vue";
 
@@ -20,24 +21,30 @@ export default {
     Todo,
     Form
   },
-  data: function() {
-    return {
+  setup() {
+    const state = reactive({
       nextId: 1,
       todos: []
-    };
-  },
-  methods: {
-    addTodo: function(text) {
-      this.todos.unshift({
-        id: this.nextId,
+    });
+
+    const addTodo = text => {
+      state.todos.unshift({
+        id: state.nextId,
         body: text
       });
-      this.nextId++;
-    },
-    removeTodo: function(target) {
-      const idx = this.todos.findIndex(({ id }) => id === target);
-      this.todos.splice(idx, 1);
-    }
+      state.nextId++;
+    };
+
+    const removeTodo = target => {
+      const idx = state.todos.findIndex(({ id }) => id === target);
+      state.todos.splice(idx, 1);
+    };
+
+    return {
+      state,
+      addTodo,
+      removeTodo
+    };
   }
 };
 </script>

@@ -6,18 +6,22 @@
 </template>
 
 <script>
+import { ref } from "@vue/composition-api";
+
 export default {
-  data: function() {
-    return {
-      body: ""
+  setup(_, { emit }) {
+    const body = ref("");
+
+    const submit = () => {
+      if (body.value.length === 0) return;
+      emit("add", body.value);
+      body.value = "";
     };
-  },
-  methods: {
-    submit: function() {
-      if (this.body.length === 0) return;
-      this.$emit("add", this.body);
-      this.body = "";
-    }
+
+    return {
+      body,
+      submit
+    };
   }
 };
 </script>
